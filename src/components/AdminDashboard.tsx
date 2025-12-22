@@ -53,10 +53,6 @@ export default function AdminDashboard() {
     });
   };
 
-  const updateRound = (round: number) => {
-    update(ref(database, 'game'), { round });
-  };
-
   return (
     <div className="admin-dashboard">
       <header className="admin-header">
