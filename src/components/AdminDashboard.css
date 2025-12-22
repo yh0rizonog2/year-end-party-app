@@ -1,0 +1,176 @@
+.admin-dashboard {
+  min-height: 100vh;
+  background: #f5f5f5;
+}
+
+.admin-header {
+  background: linear-gradient(135deg, #C84A4A 0%, #8B3434 100%);
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+
+.admin-header h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.admin-header p {
+  margin: 5px 0 0;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.admin-content {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.left-panel {
+  flex: 1;
+}
+
+.right-panel {
+  flex: 1;
+}
+
+.team-card {
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  color: white;
+}
+
+.team-info h2 {
+  margin: 0 0 8px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.team-score {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.score-number {
+  font-size: 48px;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.score-label {
+  font-size: 18px;
+  opacity: 0.9;
+}
+
+.trophy-icon {
+  font-size: 48px;
+  opacity: 0.3;
+}
+
+.history-section {
+  background: white;
+  border-radius: 16px;
+  padding: 32px;
+  text-align: center;
+  color: #999;
+  margin-top: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.control-section {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.section-title {
+  margin-bottom: 20px;
+}
+
+.icon {
+  font-size: 24px;
+}
+
+.control-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.control-group {
+  flex: 1;
+}
+
+.control-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 12px;
+  color: #666;
+}
+
+.control-select {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: #2a2a2a;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.team-buttons {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.team-button {
+  flex: 1;
+  padding: 16px;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  line-height: 1.4;
+}
+
+.team-button:hover {
+  opacity: 0.9;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.reset-button {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: #2a2a2a;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.reset-button:hover {
+  background: #3a3a3a;
+}
