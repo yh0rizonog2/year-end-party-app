@@ -130,27 +130,57 @@
   cursor: pointer;
 }
 
-.team-buttons {
+.team-buttons-grid {
   display: flex;
+  flex-direction: column;
   gap: 12px;
   margin-bottom: 20px;
 }
 
-.team-button {
-  flex: 1;
-  padding: 16px;
+.team-button-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.team-button-label {
+  font-size: 16px;
+  font-weight: 600;
+  min-width: 100px;
+}
+
+.team-button-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.point-button {
+  padding: 12px 20px;
   border: none;
   border-radius: 8px;
-  color: white;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   cursor: pointer;
   transition: opacity 0.2s;
-  line-height: 1.4;
+  min-width: 80px;
 }
 
-.team-button:hover {
+.point-button.plus {
+  color: white;
+}
+
+.point-button.plus:hover {
   opacity: 0.9;
+}
+
+.point-button.minus {
+  background: #e0e0e0;
+  color: #333;
+}
+
+.point-button.minus:hover {
+  background: #d0d0d0;
 }
 
 .action-buttons {
@@ -173,4 +203,147 @@
 
 .reset-button:hover {
   background: #3a3a3a;
+}
+
+/* Team Edit Button */
+.edit-team-button {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.edit-team-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Edit Modal */
+.edit-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.edit-modal {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.edit-modal h3 {
+  margin: 0 0 20px;
+  font-size: 20px;
+  color: #333;
+}
+
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.edit-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.edit-field label {
+  font-size: 14px;
+  color: #666;
+  font-weight: 500;
+}
+
+.edit-input {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.edit-input:focus {
+  border-color: #C84A4A;
+}
+
+.color-input-wrapper {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.edit-color {
+  width: 50px;
+  height: 50px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.color-text {
+  flex: 1;
+}
+
+.edit-preview {
+  margin-top: 8px;
+}
+
+.preview-card {
+  padding: 16px;
+  border-radius: 12px;
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.edit-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.cancel-button,
+.save-button {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.cancel-button {
+  background: #e0e0e0;
+  color: #666;
+}
+
+.cancel-button:hover {
+  background: #d0d0d0;
+}
+
+.save-button {
+  background: #C84A4A;
+  color: white;
+}
+
+.save-button:hover {
+  opacity: 0.9;
 }

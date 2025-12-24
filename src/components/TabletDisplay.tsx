@@ -40,8 +40,7 @@ export default function TabletDisplay({ teamId }: TabletDisplayProps) {
   return (
     <div className="tablet-display">
       <header className="tablet-header">
-        <h1>2025年グランドツー忘年会 🍺</h1>
-        <p>第{gameState.round}回戦</p>
+        <h1>2025年グランドツー忘年会</h1>
       </header>
 
       <div className="tablet-content">
@@ -76,9 +75,6 @@ export default function TabletDisplay({ teamId }: TabletDisplayProps) {
           </div>
         </div>
 
-        <div className="history-section-tablet">
-          <p>まだ履歴はありません</p>
-        </div>
       </div>
 
       {isConnected && (

@@ -16,7 +16,9 @@ export default function AdminDashboard() {
     teams: INITIAL_TEAMS
   });
   const [selectedPoints, setSelectedPoints] = useState(10);
-  const [selectedGame, setSelectedGame] = useState('ゲーム未選択');
+  const [editingTeam, setEditingTeam] = useState<string | null>(null);
+  const [editName, setEditName] = useState('');
+  const [editColor, setEditColor] = useState('');
 
   useEffect(() => {
     const gameRef = ref(database, 'game');
@@ -37,8 +39,9 @@ export default function AdminDashboard() {
     return () => unsubscribe();
   }, []);
 
-  const addPoints = (teamId: string) => {
-    const updatedScore = gameState.teams[teamId].score + selectedPoints;
+  const updatePoints = (teamId: string, isAdd: boolean) => {
+    const change = isAdd ? selectedPoints : -selectedPoints;
+    const updatedScore = gameState.teams[teamId].score + change;
     update(ref(database, `game/teams/${teamId}`), { score: updatedScore });
   };
 
@@ -53,11 +56,32 @@ export default function AdminDashboard() {
     });
   };
 
+  const startEditTeam = (teamId: string) => {
+    const team = gameState.teams[teamId];
+    setEditingTeam(teamId);
+    setEditName(team.name);
+    setEditColor(team.color);
+  };
+
+  const saveTeamEdit = () => {
+    if (!editingTeam) return;
+    update(ref(database, `game/teams/${editingTeam}`), {
+      name: editName,
+      color: editColor
+    });
+    setEditingTeam(null);
+  };
+
+  const cancelEdit = () => {
+    setEditingTeam(null);
+    setEditName('');
+    setEditColor('');
+  };
+
   return (
     <div className="admin-dashboard">
       <header className="admin-header">
         <h1>2025年グランドツー忘年会</h1>
-        <p>第{gameState.round}回戦</p>
       </header>
 
       <div className="admin-content">
@@ -75,13 +99,15 @@ export default function AdminDashboard() {
                   <span className="score-label">pts</span>
                 </div>
               </div>
-              <div className="trophy-icon">🏆</div>
+              <button
+                className="edit-team-button"
+                onClick={() => startEditTeam(team.id)}
+                title="チーム設定を編集"
+              >
+                ✏️
+              </button>
             </div>
           ))}
-
-          <div className="history-section">
-            <p>まだ履歴はありません</p>
-          </div>
         </div>
 
         <div className="right-panel">
@@ -92,7 +118,7 @@ export default function AdminDashboard() {
 
             <div className="control-row">
               <div className="control-group">
-                <label>追加ポイント</label>
+                <label>ポイント</label>
                 <select
                   className="control-select"
                   value={selectedPoints}
@@ -104,46 +130,94 @@ export default function AdminDashboard() {
                   <option value={50}>50</option>
                 </select>
               </div>
-
-              <div className="control-group">
-                <label>競技 / 種目</label>
-                <select
-                  className="control-select"
-                  value={selectedGame}
-                  onChange={(e) => setSelectedGame(e.target.value)}
-                >
-                  <option>ゲーム未選択</option>
-                  <option>ゲーム1</option>
-                  <option>ゲーム2</option>
-                  <option>ゲーム3</option>
-                </select>
-              </div>
             </div>
 
-            <div className="team-buttons">
+            <div className="team-buttons-grid">
               {Object.values(gameState.teams).map((team) => (
-                <button
-                  key={team.id}
-                  className="team-button"
-                  style={{ backgroundColor: team.color }}
-                  onClick={() => addPoints(team.id)}
-                >
-                  {team.name}<br />+{selectedPoints}
-                </button>
+                <div key={team.id} className="team-button-row">
+                  <span className="team-button-label" style={{ color: team.color }}>
+                    {team.name}
+                  </span>
+                  <div className="team-button-actions">
+                    <button
+                      className="point-button minus"
+                      onClick={() => updatePoints(team.id, false)}
+                    >
+                      −{selectedPoints}
+                    </button>
+                    <button
+                      className="point-button plus"
+                      style={{ backgroundColor: team.color }}
+                      onClick={() => updatePoints(team.id, true)}
+                    >
+                      +{selectedPoints}
+                    </button>
+                  </div>
+                </div>
               ))}
             </div>
           </div>
 
           <div className="action-buttons">
             <button className="reset-button" onClick={resetScores}>
-              第一回戦
-            </button>
-            <button className="reset-button" onClick={resetScores}>
               リセット
             </button>
           </div>
         </div>
       </div>
+
+      {editingTeam && (
+        <div className="edit-modal-overlay" onClick={cancelEdit}>
+          <div className="edit-modal" onClick={(e) => e.stopPropagation()}>
+            <h3>チーム設定</h3>
+            <div className="edit-form">
+              <div className="edit-field">
+                <label>チーム名</label>
+                <input
+                  type="text"
+                  value={editName}
+                  onChange={(e) => setEditName(e.target.value)}
+                  className="edit-input"
+                />
+              </div>
+              <div className="edit-field">
+                <label>カラー</label>
+                <div className="color-input-wrapper">
+                  <input
+                    type="color"
+                    value={editColor}
+                    onChange={(e) => setEditColor(e.target.value)}
+                    className="edit-color"
+                  />
+                  <input
+                    type="text"
+                    value={editColor}
+                    onChange={(e) => setEditColor(e.target.value)}
+                    className="edit-input color-text"
+                    placeholder="#000000"
+                  />
+                </div>
+              </div>
+              <div className="edit-preview">
+                <div
+                  className="preview-card"
+                  style={{ backgroundColor: editColor }}
+                >
+                  {editName}
+                </div>
+              </div>
+            </div>
+            <div className="edit-actions">
+              <button className="cancel-button" onClick={cancelEdit}>
+                キャンセル
+              </button>
+              <button className="save-button" onClick={saveTeamEdit}>
+                保存
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
