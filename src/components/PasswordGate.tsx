@@ -40,7 +40,6 @@ export default function PasswordGate({ children }: PasswordGateProps) {
   return (
     <div className="password-gate">
       <div className="password-container">
-        <h1>🍺 2025年グランドツー忘年会</h1>
         <p>パスワードを入力してください</p>
 
         <form onSubmit={handleSubmit}>
@@ -57,10 +56,6 @@ export default function PasswordGate({ children }: PasswordGateProps) {
             ログイン
           </button>
         </form>
-
-        <p className="hint">
-          デフォルトパスワード: 2025grand2
-        </p>
       </div>
     </div>
   );

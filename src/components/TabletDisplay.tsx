@@ -1,16 +1,17 @@
 import { useState, useEffect } from 'react';
-import { ref, onValue } from 'firebase/database';
+import { ref, onValue, update } from 'firebase/database';
 import { database } from '../firebase';
 import type { GameState } from '../types';
 import './TabletDisplay.css';
 
-interface TabletDisplayProps {
-  teamId: string;
-}
+const teamBackgrounds: Record<string, string> = {
+  'teamA': '/gura.png',
+  'teamB': '/tanaka.png',
+  'teamC': '/obana.png',
+};
 
-export default function TabletDisplay({ teamId }: TabletDisplayProps) {
+export default function TabletDisplay() {
   const [gameState, setGameState] = useState<GameState | null>(null);
-  const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
     const gameRef = ref(database, 'game');
@@ -18,11 +19,16 @@ export default function TabletDisplay({ teamId }: TabletDisplayProps) {
       const data = snapshot.val();
       if (data) {
         setGameState(data);
-        setIsConnected(true);
       }
     });
     return () => unsubscribe();
   }, []);
+
+  const updatePoints = (teamId: string, points: number) => {
+    if (!gameState) return;
+    const updatedScore = gameState.teams[teamId].score + points;
+    update(ref(database, `game/teams/${teamId}`), { score: updatedScore });
+  };
 
   if (!gameState) {
     return (
@@ -32,57 +38,36 @@ export default function TabletDisplay({ teamId }: TabletDisplayProps) {
     );
   }
 
-  const myTeam = gameState.teams[teamId];
-  const rivalTeams = Object.values(gameState.teams).filter(
-    (team) => team.id !== teamId
+  // スコア順にソート（1位、2位、3位）
+  const sortedTeams = Object.values(gameState.teams).sort(
+    (a, b) => b.score - a.score
   );
 
   return (
     <div className="tablet-display">
-      <header className="tablet-header">
-        <h1>2025年グランドツー忘年会</h1>
-      </header>
-
-      <div className="tablet-content">
-        <div className="my-team-section">
-          <p className="section-label">あなたのチーム</p>
+      <div className="ranking-list">
+        {sortedTeams.map((team) => (
           <div
-            className="my-team-card"
-            style={{ backgroundColor: myTeam.color }}
+            key={team.id}
+            className="ranking-item"
+            style={{
+              backgroundImage: `url(${teamBackgrounds[team.id]})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+            }}
           >
-            <div className="trophy-large">🏆</div>
-            <h2>{myTeam.name}</h2>
-            <div className="score-display">
-              <span className="score-number">{myTeam.score}</span>
-              <span className="score-label">pts</span>
+            <div className="ranking-main">
+              <span className="team-score">{team.score}</span>
+            </div>
+            <div className="score-buttons">
+              <button onClick={() => updatePoints(team.id, -10)}>−10</button>
+              <button onClick={() => updatePoints(team.id, -5)}>−5</button>
+              <button onClick={() => updatePoints(team.id, 5)}>+5</button>
+              <button onClick={() => updatePoints(team.id, 10)}>+10</button>
             </div>
           </div>
-        </div>
-
-        <div className="rivals-section">
-          <p className="section-label">ライバルのスコア</p>
-          <div className="rivals-cards">
-            {rivalTeams.map((team) => (
-              <div
-                key={team.id}
-                className="rival-card"
-                style={{ backgroundColor: team.color }}
-              >
-                <h3>{team.name}</h3>
-                <span className="rival-score">{team.score}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
+        ))}
       </div>
-
-      {isConnected && (
-        <div className="live-indicator">
-          <span className="live-dot"></span>
-          LIVE SYNCING
-        </div>
-      )}
     </div>
   );
 }
